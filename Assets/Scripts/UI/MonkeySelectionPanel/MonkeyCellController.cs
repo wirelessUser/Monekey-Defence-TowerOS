@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ServiceLocator.Player;
-using ServiceLocator.Main;
 
 namespace ServiceLocator.UI
 {
