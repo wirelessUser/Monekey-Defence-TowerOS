@@ -3,14 +3,17 @@ using UnityEngine;
 
 namespace ServiceLocator.Sound
 {
-    public class SoundService : MonoBehaviour
+    public class SoundService
     {
-        [SerializeField] private SoundScriptableObject soundScriptableObject;
-        [SerializeField] private AudioSource audioEffects;
-        [SerializeField] private AudioSource backgroundMusic;
+        private SoundScriptableObject soundScriptableObject;
+        private AudioSource audioEffects;
+        private AudioSource backgroundMusic;
 
-        private void Start()
+        public SoundService(SoundScriptableObject soundScriptableObject, AudioSource audioEffectSource, AudioSource bgMusicSource)
         {
+            this.soundScriptableObject = soundScriptableObject;
+            audioEffects = audioEffectSource;
+            backgroundMusic = bgMusicSource;
             PlaybackgroundMusic(SoundType.BackgroundMusic, true);
         }
 
@@ -25,6 +28,7 @@ namespace ServiceLocator.Sound
             }
             else
                 Debug.LogError("No Audio Clip selected.");
+            
         }
 
         private void PlaybackgroundMusic(SoundType soundType, bool loopSound = false)

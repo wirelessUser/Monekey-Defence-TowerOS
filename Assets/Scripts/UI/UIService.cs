@@ -62,6 +62,7 @@ namespace ServiceLocator.UI
 
         private void InitializeMapSelectionUI(EventService eventService)
         {
+            Debug.Log($"initialize map selection uI");
             levelSelectionPanel.SetActive(true);
             foreach (MapButton mapButton in mapButtons)
             {
@@ -84,7 +85,7 @@ namespace ServiceLocator.UI
             gameplayPanel.SetActive(true);
             MonkeySelectionPanel.SetActive(true);
             monkeySelectionController.SetActive(true);
-            currentMapText.SetText("Map: " + mapID);
+            currentMapText.SetText($"Map: {mapID}");
         }
 
         private void OnNextWaveButton()

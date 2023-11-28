@@ -44,8 +44,9 @@ namespace ServiceLocator.Player
 
         public void BloonEnteredRange(BloonController bloon)
         {
-            if (CanAttackBloon(bloon.GetBloonType()))
+            if (CanAttackBloon(bloon.GetBloonType())){
                 bloonsInRange.Add(bloon);
+            }
         }
 
         public void BloonExitedRange(BloonController bloon)
