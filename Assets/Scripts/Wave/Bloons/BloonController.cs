@@ -24,7 +24,6 @@ namespace ServiceLocator.Wave.Bloon
         private int currentWaypointIndex;
         private BloonState currentState;
         private CancellationTokenSource regenerationCancellationTokenSource;
-        private DateTime lastDamageTime;
 
 
         public Vector3 Position => bloonView.transform.position;
@@ -76,7 +75,6 @@ namespace ServiceLocator.Wave.Bloon
 
             var reducedHealth = currentHealth - damageToTake;
             currentHealth = reducedHealth <= 0 ? 0 : reducedHealth;
-            lastDamageTime = DateTime.UtcNow;
 
             if(currentHealth <= 0 && currentState == BloonState.ACTIVE)
             {
