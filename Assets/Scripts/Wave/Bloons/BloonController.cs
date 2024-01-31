@@ -1,12 +1,16 @@
-using ServiceLocator.Player;
-using ServiceLocator.Sound;
 using System.Collections.Generic;
 using UnityEngine;
+using ServiceLocator.Player;
+using ServiceLocator.Sound;
+using System.Threading;
+using System;
+using System.Threading.Tasks;
 
 namespace ServiceLocator.Wave.Bloon
 {
     public class BloonController
     {
+        // Dependencies:
         private PlayerService playerService;
         private WaveService waveService;
         private SoundService soundService;
@@ -19,6 +23,8 @@ namespace ServiceLocator.Wave.Bloon
         private int currentHealth;
         private int currentWaypointIndex;
         private BloonState currentState;
+        private CancellationTokenSource regenerationCancellationTokenSource;
+
 
         public Vector3 Position => bloonView.transform.position;
 
@@ -27,7 +33,8 @@ namespace ServiceLocator.Wave.Bloon
             this.playerService = playerService;
             this.waveService = waveService;
             this.soundService = soundService;
-            bloonView = Object.Instantiate(bloonPrefab, bloonContainer);
+
+            bloonView = UnityEngine.Object.Instantiate(bloonPrefab, bloonContainer);
             bloonView.Controller = this;
         }
 
@@ -40,7 +47,7 @@ namespace ServiceLocator.Wave.Bloon
 
         private void InitializeVariables()
         {
-            bloonView.SetRenderer(bloonScriptableObject.Sprite);
+            bloonView.SetRenderer(bloonScriptableObject.FullHealthSprite);
             currentHealth = bloonScriptableObject.Health;
             waypoints = new List<Vector3>();
         }
@@ -61,13 +68,41 @@ namespace ServiceLocator.Wave.Bloon
 
         public void TakeDamage(int damageToTake)
         {
-            int reducedHealth = currentHealth - damageToTake;
+            if(regenerationCancellationTokenSource != null){
+                regenerationCancellationTokenSource.Cancel();
+                regenerationCancellationTokenSource.Dispose();
+            }
+
+            var reducedHealth = currentHealth - damageToTake;
             currentHealth = reducedHealth <= 0 ? 0 : reducedHealth;
 
-            if (currentHealth <= 0 && currentState == BloonState.ACTIVE)
+            if(currentHealth <= 0 && currentState == BloonState.ACTIVE)
             {
                 PopBloon();
-                soundService.PlaySoundEffects(Sound.SoundType.BloonPop);
+                soundService.PlaySoundEffects(SoundType.BloonPop);
+            }else if(currentHealth <= currentHealth * 0.25 && currentState == BloonState.ACTIVE){
+                bloonView.SetRenderer(bloonScriptableObject.LowHealthSprite);
+            }else{
+                bloonView.SetRenderer(bloonScriptableObject.FullHealthSprite);
+            }
+
+            regenerationCancellationTokenSource = new CancellationTokenSource();
+            RegenerateHealth(regenerationCancellationTokenSource.Token);
+        }
+
+        private async void RegenerateHealth(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(bloonScriptableObject.HealthRegenerationAfter), cancellationToken);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    currentHealth += bloonScriptableObject.HealthRegenerationValue;
+                    currentHealth = Mathf.Min(currentHealth, bloonScriptableObject.Health); 
+                }
+            }
+            catch (TaskCanceledException)
+            {
             }
         }
 

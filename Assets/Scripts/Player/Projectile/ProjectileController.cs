@@ -1,5 +1,6 @@
 using UnityEngine;
 using ServiceLocator.Wave.Bloon;
+using ServiceLocator.Main;
 
 namespace ServiceLocator.Player.Projectile
 {
@@ -51,7 +52,7 @@ namespace ServiceLocator.Player.Projectile
 
         public void OnHitBloon(BloonController bloonHit)
         {
-            if (currentState == ProjectileState.ACTIVE)
+            if(currentState == ProjectileState.ACTIVE)
             {
                 bloonHit.TakeDamage(projectileScriptableObject.Damage);
                 ResetProjectile();
@@ -67,11 +68,11 @@ namespace ServiceLocator.Player.Projectile
         }
 
         private void SetState(ProjectileState newState) => currentState = newState;
+    }
 
-        private enum ProjectileState
-        {
-            ACTIVE,
-            HIT_TARGET
-        }
+    public enum ProjectileState
+    {
+        ACTIVE,
+        HIT_TARGET
     }
 }

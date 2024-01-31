@@ -1,39 +1,47 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 using ServiceLocator.Wave.Bloon;
-using ServiceLocator.Events;
+using System.Threading.Tasks;
 using ServiceLocator.UI;
 using ServiceLocator.Map;
 using ServiceLocator.Sound;
 using ServiceLocator.Player;
+using ServiceLocator.Events;
 
 namespace ServiceLocator.Wave
 {
-    public class WaveService : MonoBehaviour
+    public class WaveService
     {
-        [SerializeField] private EventService eventService;
-        [SerializeField] private UIService uiService;
-        [SerializeField] private MapService mapService;
-        [SerializeField] private SoundService soundService;
-        [SerializeField] private PlayerService playerService;
+        // Dependencies:
+        private UIService uiService;
+        private MapService mapService;
+        private PlayerService playerService;
+        private SoundService soundService;
+        private EventService eventService;
 
-        [SerializeField] private WaveScriptableObject waveScriptableObject;
+        private WaveScriptableObject waveScriptableObject;
         private BloonPool bloonPool;
 
         private int currentWaveId;
         private List<WaveData> waveDatas;
         private List<BloonController> activeBloons;
 
-        private void Start()
+        public WaveService(WaveScriptableObject waveScriptableObject) => this.waveScriptableObject = waveScriptableObject;
+
+        public void Init(UIService uiService, MapService mapService, PlayerService playerService, SoundService soundService, EventService eventService)
         {
+            this.uiService = uiService;
+            this.mapService = mapService;
+            this.playerService = playerService;
+            this.soundService = soundService;
+            this.eventService = eventService;
             InitializeBloons();
             SubscribeToEvents();
         }
 
         private void InitializeBloons()
         {
-            bloonPool = new BloonPool(playerService, this, soundService, waveScriptableObject);
+            bloonPool = new BloonPool(this, playerService, soundService, waveScriptableObject);
             activeBloons = new List<BloonController>();
         }
 
