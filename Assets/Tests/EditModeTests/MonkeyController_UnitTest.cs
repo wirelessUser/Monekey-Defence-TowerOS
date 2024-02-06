@@ -14,8 +14,8 @@ public class MonkeyController_UnitTest
     {
         MonkeyScriptableObject monkeySO = CreateDummyMonkeySO();
         ProjectilePool projectilePool = CreateDummyProjectilePool();
-        SoundService soundService = CreateDummySoundService();
-        monkeyController = new MonkeyController(soundService, monkeySO, projectilePool);
+       // SoundService soundService = CreateDummySoundService();
+        monkeyController = new MonkeyController(monkeySO, projectilePool);
     }
 
     private MonkeyScriptableObject CreateDummyMonkeySO()
@@ -40,7 +40,7 @@ public class MonkeyController_UnitTest
         projectileSOs.Add(ScriptableObject.CreateInstance<ProjectileScriptableObject>());
         
         PlayerService playerService = CreaateDummyPlayerService(projectilePrefab, projectileSOs);
-        return new ProjectilePool(playerService, projectilePrefab, projectileSOs);
+        return new ProjectilePool( projectilePrefab, projectileSOs);
     }
 
     private PlayerService CreaateDummyPlayerService(ProjectileView projectilePrefab, List<ProjectileScriptableObject> projectileSOs)
@@ -48,15 +48,15 @@ public class MonkeyController_UnitTest
         PlayerScriptableObject playerSO = ScriptableObject.CreateInstance<PlayerScriptableObject>();
         playerSO.ProjectilePrefab = projectilePrefab;
         playerSO.ProjectileScriptableObjects = projectileSOs;
-        return new PlayerService(playerSO);
+        return PlayerService.Instance;
     }
 
-    private SoundService CreateDummySoundService()
-    {
-        SoundScriptableObject soundSO = ScriptableObject.CreateInstance<SoundScriptableObject>();
-        soundSO.audioList = new Sounds[0];
-        return new SoundService(soundSO, new GameObject().AddComponent<AudioSource>(), new GameObject().AddComponent<AudioSource>());
-    }
+    //private SoundService CreateDummySoundService()
+    //{
+    //    SoundScriptableObject soundSO = ScriptableObject.CreateInstance<SoundScriptableObject>();
+    //    soundSO.audioList = new Sounds[0];
+    //    return new SoundService(soundSO, new GameObject().AddComponent<AudioSource>(), new GameObject().AddComponent<AudioSource>());
+    //}
 
     //[Test]
     public void CanAttackBloon_CheckCondition()

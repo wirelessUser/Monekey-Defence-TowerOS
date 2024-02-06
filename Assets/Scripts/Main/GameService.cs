@@ -12,11 +12,10 @@ namespace ServiceLocator.Main
     {
         // Services:
         private EventService eventService;
-        private MapService mapService;
+       
         private WaveService waveService;
-        private SoundService soundService;
-        private PlayerService playerService;
-        [SerializeField] private UIService uiService;
+      
+       
 
 
         // Scriptable Objects:
@@ -38,23 +37,29 @@ namespace ServiceLocator.Main
         private void InitializeServices()
         {
             eventService = new EventService();
-            soundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
-            mapService = new MapService(mapScriptableObject);
-            playerService = new PlayerService(playerScriptableObject);
-            waveService = new WaveService(waveScriptableObject);
+            
+            SoundService.Instance.Init(soundScriptableObject, sfxSource, bgMusicSource);
+            
+            MapService.Instance.InitFromGameSerive(mapScriptableObject);
+              
+            PlayerService.Instance.InitGameService(playerScriptableObject);    
+        
+           
+            WaveService.Instance.InitWaveFromGameService(waveScriptableObject);
         }
 
         private void InjectDependencies()
         {
-            mapService.Init(eventService);
-            uiService.Init(waveService, playerService, eventService);
-            playerService.Init(mapService, uiService, soundService);
-            waveService.Init(uiService, mapService, playerService, soundService, eventService);
+            MapService.Instance.Init(eventService);
+            UIService.Instance.Init(eventService);
+            PlayerService.Instance.Init();
+            WaveService.Instance.Init(eventService);
+            //UIService.Instance.Init(  soundService, eventService);
         }
 
         private void Update()
         {
-            playerService.Update();
+            PlayerService.Instance.Update();
         }
     }
 }

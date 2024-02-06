@@ -7,7 +7,7 @@ using ServiceLocator.Events;
 
 namespace ServiceLocator.Map
 {
-    public class MapService
+    public class MapService :MonoBehaviour
     {
         // Dependencies:
         private EventService eventService;
@@ -18,7 +18,20 @@ namespace ServiceLocator.Map
         private MapData currentMapData;
         private SpriteRenderer tileOverlay;
 
-        public MapService(MapScriptableObject mapScriptableObject)
+        private static MapService instance;
+        public static MapService Instance { get { return instance; } }
+        private void Awake()
+        {
+            MakeInstance();
+        }
+        private void MakeInstance()
+        {
+            if (instance == null) instance = this;
+            else { Destroy(gameObject); }
+        }
+
+
+        public void InitFromGameSerive(MapScriptableObject mapScriptableObject)
         {
             this.mapScriptableObject = mapScriptableObject;
             tileOverlay = Object.Instantiate(mapScriptableObject.TileOverlay).GetComponent<SpriteRenderer>();
