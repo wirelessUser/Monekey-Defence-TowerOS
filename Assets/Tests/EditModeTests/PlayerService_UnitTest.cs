@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class PlayerService_UnitTest 
 {
-    private PlayerService playerService;
+   // private PlayerService playerService;
 
     //[SetUp]
     public void Setup()
@@ -15,7 +15,8 @@ public class PlayerService_UnitTest
         PlayerScriptableObject playerSO = CreateDummyPlayerSO();
         Transform projectileContainer = new GameObject().transform;
 
-        playerService = new PlayerService(playerSO);
+       // playerService = new PlayerService(playerSO);
+        
     }
 
     private PlayerScriptableObject CreateDummyPlayerSO()
@@ -32,10 +33,10 @@ public class PlayerService_UnitTest
     public void GetReward_AddsMoney()
     {
         // Arrange
-        var initialMoney = playerService.Money;
+        var initialMoney = PlayerService.Instance.Money;
 
         // Act
-        playerService.GetReward(100);
+        PlayerService.Instance.GetReward(100);
 
         // Assert
         //Assert.AreEqual(initialMoney + 100, playerService.Money);

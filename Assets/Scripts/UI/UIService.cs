@@ -12,7 +12,7 @@ namespace ServiceLocator.UI
     public class UIService : MonoBehaviour
     {
         // Dependencies:
-        private WaveService waveService;
+       
         private EventService eventService;
 
         [Header("Gameplay Panel")]
@@ -40,6 +40,23 @@ namespace ServiceLocator.UI
         [SerializeField] private Button playAgainButton;
         [SerializeField] private Button quitButton;
 
+
+        private static UIService instance;
+
+        public static UIService Instance { get { return instance; } }
+
+
+        private void Awake()
+        {
+            MakeInstance();
+        }
+        private void MakeInstance()
+        {
+            if (instance == null) instance = this;
+            else { Destroy(gameObject); }
+        }
+
+
         private void Start()
         {
             gameplayPanel.SetActive(false);
@@ -50,13 +67,12 @@ namespace ServiceLocator.UI
             playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
         }
 
-        public void Init(WaveService waveService, PlayerService playerService, EventService eventService)
+        public void Init(  EventService eventService)
         {
-            this.waveService = waveService;
             this.eventService = eventService;
 
             InitializeMapSelectionUI(eventService);
-            InitializeMonkeySelectionUI(playerService);
+            InitializeMonkeySelectionUI();
             SubscribeToEvents();
         }
 
@@ -70,9 +86,9 @@ namespace ServiceLocator.UI
             }
         }
 
-        private void InitializeMonkeySelectionUI(PlayerService playerService)
+        private void InitializeMonkeySelectionUI()
         {
-            monkeySelectionController = new MonkeySelectionUIController(playerService, cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects);
+            monkeySelectionController = new MonkeySelectionUIController( cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects);
             MonkeySelectionPanel.SetActive(false);
             monkeySelectionController.SetActive(false);
         }
@@ -90,7 +106,7 @@ namespace ServiceLocator.UI
 
         private void OnNextWaveButton()
         {
-            waveService.StarNextWave();
+            WaveService.Instance.StarNextWave();
             SetNextWaveButton(false);
         }
 

@@ -3,13 +3,27 @@ using UnityEngine;
 
 namespace ServiceLocator.Sound
 {
-    public class SoundService
+    public class SoundService :MonoBehaviour
     {
         private SoundScriptableObject soundScriptableObject;
         private AudioSource audioEffects;
         private AudioSource backgroundMusic;
 
-        public SoundService(SoundScriptableObject soundScriptableObject, AudioSource audioEffectSource, AudioSource bgMusicSource)
+
+        private static SoundService instance;
+        public static SoundService Instance { get { return instance; } }
+
+        private void Awake()
+        {
+            MakeInstance();
+        }
+        private void MakeInstance()
+        {
+            if (instance == null) instance = this;
+            else { Destroy(gameObject); }
+        }
+
+        public void Init(SoundScriptableObject soundScriptableObject, AudioSource audioEffectSource, AudioSource bgMusicSource)
         {
             this.soundScriptableObject = soundScriptableObject;
             audioEffects = audioEffectSource;

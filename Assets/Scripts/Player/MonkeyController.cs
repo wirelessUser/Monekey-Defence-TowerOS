@@ -9,7 +9,6 @@ namespace ServiceLocator.Player
     public class MonkeyController
     {
         // Dependencies:
-        private SoundService soundService;
         private MonkeyScriptableObject monkeyScriptableObject;
         private ProjectilePool projectilePool;
         private MonkeyView monkeyView;
@@ -17,9 +16,9 @@ namespace ServiceLocator.Player
         private List<BloonController> bloonsInRange;
         private float attackTimer;
 
-        public MonkeyController(SoundService soundService, MonkeyScriptableObject monkeyScriptableObject, ProjectilePool projectilePool)
+        public MonkeyController( MonkeyScriptableObject monkeyScriptableObject, ProjectilePool projectilePool)
         {
-            this.soundService = soundService;
+            //this.soundService = soundService;
             this.monkeyScriptableObject = monkeyScriptableObject;
             this.projectilePool = projectilePool;
 
@@ -79,7 +78,7 @@ namespace ServiceLocator.Player
             if(attackTimer <= 0)
             {
                 CreateProjectileForTarget(targetBloon);
-                soundService.PlaySoundEffects(SoundType.MonkeyShoot);
+                SoundService.Instance.PlaySoundEffects(SoundType.MonkeyShoot);
                 ResetAttackTimer();
             }
         }

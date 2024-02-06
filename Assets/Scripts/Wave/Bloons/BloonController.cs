@@ -11,9 +11,9 @@ namespace ServiceLocator.Wave.Bloon
     public class BloonController
     {
         // Dependencies:
-        private PlayerService playerService;
-        private WaveService waveService;
-        private SoundService soundService;
+      
+       
+        
 
         private BloonView bloonView;
         private BloonScriptableObject bloonScriptableObject;
@@ -28,11 +28,10 @@ namespace ServiceLocator.Wave.Bloon
 
         public Vector3 Position => bloonView.transform.position;
 
-        public BloonController(PlayerService playerService, WaveService waveService, SoundService soundService, BloonView bloonPrefab, Transform bloonContainer)
+        public BloonController(   BloonView bloonPrefab, Transform bloonContainer)
         {
-            this.playerService = playerService;
-            this.waveService = waveService;
-            this.soundService = soundService;
+           
+          
 
             bloonView = UnityEngine.Object.Instantiate(bloonPrefab, bloonContainer);
             bloonView.Controller = this;
@@ -79,7 +78,7 @@ namespace ServiceLocator.Wave.Bloon
             if(currentHealth <= 0 && currentState == BloonState.ACTIVE)
             {
                 PopBloon();
-                soundService.PlaySoundEffects(SoundType.BloonPop);
+                SoundService.Instance.PlaySoundEffects(SoundType.BloonPop);
             }else if(currentHealth <= currentHealth * 0.25 && currentState == BloonState.ACTIVE){
                 bloonView.SetRenderer(bloonScriptableObject.LowHealthSprite);
             }else{
@@ -127,8 +126,8 @@ namespace ServiceLocator.Wave.Bloon
 
         private void ResetBloon()
         {
-            waveService.RemoveBloon(this);
-            playerService.TakeDamage(bloonScriptableObject.Damage);
+            WaveService.Instance.RemoveBloon(this);
+            PlayerService.Instance.TakeDamage(bloonScriptableObject.Damage);
             bloonView.gameObject.SetActive(false);
         }
 
@@ -147,13 +146,13 @@ namespace ServiceLocator.Wave.Bloon
             if (HasLayeredBloons())
                 SpawnLayeredBloons();
 
-            playerService.GetReward(bloonScriptableObject.Reward);
-            waveService.RemoveBloon(this);
+            PlayerService.Instance.GetReward(bloonScriptableObject.Reward);
+            WaveService.Instance.RemoveBloon(this);
         }
 
         private bool HasLayeredBloons() => bloonScriptableObject.LayeredBloons.Count > 0;
 
-        private void SpawnLayeredBloons() => waveService.SpawnBloons(bloonScriptableObject.LayeredBloons,
+        private void SpawnLayeredBloons() => WaveService.Instance.SpawnBloons(bloonScriptableObject.LayeredBloons,
                                                                      bloonView.transform.position,
                                                                      currentWaypointIndex,
                                                                      bloonScriptableObject.LayerBloonSpawnRate);
