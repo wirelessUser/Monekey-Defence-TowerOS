@@ -9,7 +9,7 @@ using ServiceLocator.Events;
 
 namespace ServiceLocator.UI
 {
-    public class UIService : MonoBehaviour
+    public class UIService : GenericMonoBehaviourSingleton<UIService>
     {
         // Dependencies:
        
@@ -41,20 +41,20 @@ namespace ServiceLocator.UI
         [SerializeField] private Button quitButton;
 
 
-        private static UIService instance;
+        //private static UIService instance;
 
-        public static UIService Instance { get { return instance; } }
+        //public static UIService Instance { get { return instance; } }
 
 
-        private void Awake()
-        {
-            MakeInstance();
-        }
-        private void MakeInstance()
-        {
-            if (instance == null) instance = this;
-            else { Destroy(gameObject); }
-        }
+        //private void Awake()
+        //{
+        //    MakeInstance();
+        //}
+        //private void MakeInstance()
+        //{
+        //    if (instance == null) instance = this;
+        //    else { Destroy(gameObject); }
+        //}
 
 
         private void Start()
