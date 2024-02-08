@@ -7,7 +7,7 @@ using ServiceLocator.Sound;
 
 namespace ServiceLocator.Player
 {
-    public class PlayerService :MonoBehaviour
+    public class PlayerService : GenericMonoBehaviourSingleton<PlayerService>
     {
         // Dependencies:
         
@@ -20,18 +20,18 @@ namespace ServiceLocator.Player
         private int health;
         public int Money { get; private set; }
 
-        private static PlayerService instance;
-        public static PlayerService  Instance { get { return instance; }  }
+        //private static PlayerService instance;
+        //public static PlayerService  Instance { get { return instance; }  }
 
-        private void Awake()
-        {
-            MakeInstance();
-        }
-        private void MakeInstance()
-        {
-            if (instance == null)  instance = this;
-            else{   Destroy(gameObject); }
-        }
+        //private void Awake()
+        //{
+        //    MakeInstance();
+        //}
+        //private void MakeInstance()
+        //{
+        //    if (instance == null)  instance = this;
+        //    else{   Destroy(gameObject); }
+        //}
 
 
         public void InitGameService(PlayerScriptableObject playerScriptableObject)
