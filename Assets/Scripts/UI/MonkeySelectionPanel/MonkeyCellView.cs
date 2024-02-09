@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using ServiceLocator.Wave.Bloon;
 
 namespace ServiceLocator.UI
 {
@@ -22,6 +23,8 @@ namespace ServiceLocator.UI
             nameText.SetText(nameToSet);
             costText.SetText(costToSet.ToString());
         }
+
+     
 
     }
 }

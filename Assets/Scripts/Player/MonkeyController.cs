@@ -56,9 +56,9 @@ namespace ServiceLocator.Player
 
         public bool CanAttackBloon(BloonType bloonType) => monkeyScriptableObject.AttackableBloons.Contains(bloonType);
 
-        public void UpdateMonkey()
+      public void UpdateMonkey()
         {
-            if(bloonsInRange.Count > 0)
+            if (bloonsInRange.Count > 0)
             {
                 RotateTowardsTarget(bloonsInRange[0]);
                 ShootAtTarget(bloonsInRange[0]);

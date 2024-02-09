@@ -20,18 +20,7 @@ namespace ServiceLocator.Player
         private int health;
         public int Money { get; private set; }
 
-        //private static PlayerService instance;
-        //public static PlayerService  Instance { get { return instance; }  }
-
-        //private void Awake()
-        //{
-        //    MakeInstance();
-        //}
-        //private void MakeInstance()
-        //{
-        //    if (instance == null)  instance = this;
-        //    else{   Destroy(gameObject); }
-        //}
+      
 
 
         public void InitGameService(PlayerScriptableObject playerScriptableObject)
@@ -40,10 +29,10 @@ namespace ServiceLocator.Player
             projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
         }
 
-        public void Init( /* SoundService soundService*/)
+        public void Init( )
         {
 
-            //this.soundService = soundService;
+           
             InitializeVariables();
         }
 
@@ -58,6 +47,13 @@ namespace ServiceLocator.Player
 
         public void Update()
         {
+            if (activeMonkeys.Count != 0)
+            {
+                foreach (MonkeyController controller in activeMonkeys)
+                {
+                    controller.UpdateMonkey();
+                }
+            }
             foreach(MonkeyController monkey in activeMonkeys)
             {
                 monkey?.UpdateMonkey();
