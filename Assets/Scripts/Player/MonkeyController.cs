@@ -27,18 +27,32 @@ namespace ServiceLocator.Player
             ResetAttackTimer();
         }
 
+
+        public void Update()
+        {
+            if (bloonsInRange.Count > 0)
+            {
+                RotateTowardsTarget(bloonsInRange[0]);
+                ShootAtTarget(bloonsInRange[0]);
+            }
+        }
         public void SetPosition(Vector3 positionToSet) => monkeyView.transform.position = positionToSet;
 
         public void BloonEnteredRange(BloonController bloon)
         {
             if (CanAttackBloon(bloon.GetBloonType()))
+            {
                 bloonsInRange.Add(bloon);
+               
+            }
         }
 
         public void BloonExitedRange(BloonController bloon)
         {
             if (CanAttackBloon(bloon.GetBloonType()))
+            {
                 bloonsInRange.Remove(bloon);
+            }
         }
 
         public bool CanAttackBloon(BloonType bloonType) => monkeyScriptableObject.AttackableBloons.Contains(bloonType);

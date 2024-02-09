@@ -5,28 +5,30 @@ using ServiceLocator.Utilities;
 using ServiceLocator.UI;
 using ServiceLocator.Map;
 using ServiceLocator.Sound;
-
+using ServiceLocator.Main;
 namespace ServiceLocator.Player
 {
-    public class PlayerService : GenericMonoSingleton<PlayerService>
+    public class PlayerService 
     {
-        [SerializeField] public PlayerScriptableObject playerScriptableObject;
+      
 
         private ProjectilePool projectilePool;
-
+        private PlayerScriptableObject playerScriptableObj;
         private List<MonkeyController> activeMonkeys;
         private MonkeyView selectedMonkeyView;
         private int health;
         private int money;
         public int Money => money;
 
-        private void Start()
-        {
-            projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
-            InitializeVariables();
-        }
 
-        private void InitializeVariables()
+        public PlayerService(PlayerScriptableObject playerScriptableObj)
+        {
+            projectilePool = new ProjectilePool(playerScriptableObj.ProjectilePrefab, playerScriptableObj.ProjectileScriptableObjects);
+            InitializeVariables(playerScriptableObj);
+           this.playerScriptableObj = playerScriptableObj;
+        }
+       
+        private void InitializeVariables(PlayerScriptableObject playerScriptableObject)
         {
             health = playerScriptableObject.Health;
             money = playerScriptableObject.Money;
@@ -37,6 +39,13 @@ namespace ServiceLocator.Player
 
         public void Update()
         {
+            if (activeMonkeys != null)
+            {
+                foreach (MonkeyController monkey in activeMonkeys)
+                {
+                    monkey.Update();
+                }
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 UpdateSelectedMonkeyDisplay();
@@ -86,7 +95,7 @@ namespace ServiceLocator.Player
 
         public void SpawnMonkey(MonkeyType monkeyType, Vector3 spawnPosition)
         {
-            MonkeyScriptableObject monkeySO = playerScriptableObject.MonkeyScriptableObjects.Find(so => so.Type == monkeyType);
+            MonkeyScriptableObject monkeySO = playerScriptableObj.MonkeyScriptableObjects.Find(so => so.Type == monkeyType);
             MonkeyController monkey = new MonkeyController(monkeySO, projectilePool);
             monkey.SetPosition(spawnPosition);
             activeMonkeys.Add(monkey);
