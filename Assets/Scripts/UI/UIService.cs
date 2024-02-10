@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using ServiceLocator.Utilities;
 using ServiceLocator.Events;
 using ServiceLocator.Wave;
+using ServiceLocator.Main;
 
 namespace ServiceLocator.UI
 {
@@ -67,7 +68,7 @@ namespace ServiceLocator.UI
 
         private void OnNextWaveButton()
         {
-            WaveService.Instance.StarNextWave();
+            GameService.Instance.waveService.StarNextWave();
             SetNextWaveButton(false);
         }
 
