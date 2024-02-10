@@ -23,6 +23,8 @@ namespace ServiceLocator.Map
             SubscribeToEvents();
         }
 
+
+ 
         private void SubscribeToEvents() => GameService.Instance.EventService.OnMapSelected.AddListener(LoadMap);
 
         private void LoadMap(int mapId)

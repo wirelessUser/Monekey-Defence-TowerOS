@@ -20,17 +20,10 @@ namespace ServiceLocator.Player
         public int Money { get; private set; }
 
         //dependencies.....
-        public MapService mapService;
-        public WaveService waveService;
-        public SoundService soundService;
-        public UIService uiService;
-
-        public PlayerService(PlayerScriptableObject playerScriptableObject)
-        {
-            this.playerScriptableObject = playerScriptableObject;
-            projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
-           
-        }
+        private MapService mapService;
+        private WaveService waveService;
+        private SoundService soundService;
+        private UIService uiService;
 
 
         public void Init(MapService mapService, WaveService waveService, SoundService soundService, UIService uiService)
@@ -42,6 +35,15 @@ namespace ServiceLocator.Player
 
             InitializeVariables();
         }
+        public PlayerService(PlayerScriptableObject playerScriptableObject)
+        {
+            this.playerScriptableObject = playerScriptableObject;
+            projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
+           
+        }
+
+
+      
         private void InitializeVariables()
         {
             activeMonkeys = new List<MonkeyController>();

@@ -3,6 +3,9 @@ using UnityEngine;
 using ServiceLocator.Wave.Bloon;
 using System.Threading.Tasks;
 using ServiceLocator.Main;
+using ServiceLocator.Sound;
+using ServiceLocator.Map;
+using ServiceLocator.UI;
 
 namespace ServiceLocator.Wave
 {
@@ -14,7 +17,11 @@ namespace ServiceLocator.Wave
         private int currentWaveId;
         private List<WaveData> waveDatas;
         private List<BloonController> activeBloons;
-
+        //dependencies.....
+        private MapService mapService;
+        private WaveService waveService;
+        private SoundService soundService;
+        private UIService uiService;
         public WaveService(WaveScriptableObject waveScriptableObject)
         {
             this.waveScriptableObject = waveScriptableObject;
@@ -22,6 +29,12 @@ namespace ServiceLocator.Wave
             SubscribeToEvents();
         }
 
+        public void Init(MapService mapService, SoundService soundService, UIService uiService)
+        {
+            this.mapService = mapService;  
+            this.soundService = soundService;
+            this.uiService = uiService;
+        }
         private void InitializeBloons()
         {
             bloonPool = new BloonPool(waveScriptableObject);
@@ -34,14 +47,14 @@ namespace ServiceLocator.Wave
         {
             currentWaveId = 0;
             waveDatas = waveScriptableObject.WaveConfigurations.Find(config => config.MapID == mapId).WaveDatas;
-            GameService.Instance.UIService.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
+            uiService.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
         }
 
         public void StarNextWave()
         {
             currentWaveId++;
             var bloonsToSpawn = GetBloonsForCurrentWave();
-            var spawnPosition = GameService.Instance.MapService.GetBloonSpawnPositionForCurrentMap();
+            var spawnPosition = mapService.GetBloonSpawnPositionForCurrentMap();
             SpawnBloons(bloonsToSpawn, spawnPosition, 0, waveScriptableObject.SpawnRate);
         }
 
@@ -74,9 +87,9 @@ namespace ServiceLocator.Wave
                 GameService.Instance.UIService.UpdateWaveProgressUI(currentWaveId, waveDatas.Count);
 
                 if(IsLevelWon())
-                    GameService.Instance.UIService.UpdateGameEndUI(true);
+                    uiService.UpdateGameEndUI(true);
                 else
-                    GameService.Instance.UIService.SetNextWaveButton(true);
+                    uiService.SetNextWaveButton(true);
             }
         }
 
