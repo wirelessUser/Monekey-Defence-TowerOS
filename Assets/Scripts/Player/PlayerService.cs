@@ -21,15 +21,14 @@ namespace ServiceLocator.Player
 
         //dependencies.....
         private MapService mapService;
-        private WaveService waveService;
+     
         private SoundService soundService;
         private UIService uiService;
 
 
-        public void Init(MapService mapService, WaveService waveService, SoundService soundService, UIService uiService)
+        public void Init(MapService mapService,  SoundService soundService, UIService uiService)
         {
-            this.mapService = mapService;
-            this.waveService = waveService;
+            this.mapService = mapService;         
             this.soundService = soundService;
             this.uiService = uiService;
 
@@ -120,7 +119,7 @@ namespace ServiceLocator.Player
         public void SpawnMonkey(MonkeyType monkeyType, Vector3 spawnPosition)
         {
             MonkeyScriptableObject monkeyScriptableObject = GetMonkeyScriptableObjectByType(monkeyType);
-            MonkeyController monkey = new MonkeyController(monkeyScriptableObject, projectilePool);
+            MonkeyController monkey = new MonkeyController(monkeyScriptableObject, projectilePool, soundService,this);
 
             monkey.SetPosition(spawnPosition);
             activeMonkeys.Add(monkey);
