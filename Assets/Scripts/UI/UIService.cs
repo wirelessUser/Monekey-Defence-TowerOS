@@ -40,13 +40,13 @@ namespace ServiceLocator.UI
         private WaveService waveService;
         private EventService eventService;
         private PlayerService playerService;
+        [SerializeField]private MapButton mapButton;
+        
 
         private void Start()
         {
-            monkeySelectionController = new MonkeySelectionUIController(cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects, playerService);
+            InitMonkeySelectionController();
             MonkeySelectionPanel.SetActive(false);
-            monkeySelectionController.SetActive(false);
-
             gameplayPanel.SetActive(false);
             levelSelectionPanel.SetActive(true);
             gameEndPanel.SetActive(false);
@@ -55,11 +55,20 @@ namespace ServiceLocator.UI
             quitButton.onClick.AddListener(OnQuitButtonClicked);
             playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
         }
+
+        private void InitMonkeySelectionController()
+        {
+            monkeySelectionController = new MonkeySelectionUIController(cellContainer, monkeyCellPrefab, monkeyCellScriptableObjects, playerService);
+
+            monkeySelectionController.SetActive(false);
+        }
+
         public void Init( WaveService waveService, EventService eventService, PlayerService playerService)
         {     
             this.waveService = waveService;
             this.eventService = eventService;
             this.playerService = playerService;
+            mapButton.Init(eventService);
             SubscribeToEvents();
         }
         public void SubscribeToEvents() => eventService.OnMapSelected.AddListener(OnMapSelected);
