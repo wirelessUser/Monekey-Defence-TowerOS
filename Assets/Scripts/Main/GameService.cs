@@ -9,14 +9,15 @@ using ServiceLocator.UI;
 
 namespace ServiceLocator.Main
 {
-    public class GameService : GenericMonoSingleton<GameService>
+    public class GameService : MonoBehaviour
     {
         // Services:
-        public EventService EventService { get; private set; }
-        public MapService MapService { get; private set; }
-        public WaveService WaveService { get; private set; }
-        public SoundService SoundService { get; private set; }
-        public PlayerService PlayerService { get; private set; }
+        public EventService EventService   ;
+        public MapService MapService       ;
+        public WaveService WaveService     ;
+        public SoundService SoundService   ;
+        public PlayerService PlayerService ;
+      //  public MapButton mapButton { get; private set; }
 
         [SerializeField] private UIService uiService;
         public UIService UIService => uiService;
@@ -35,15 +36,25 @@ namespace ServiceLocator.Main
         private void Start()
         {
             EventService = new EventService();
-            UIService.SubscribeToEvents();
+          //  UIService.SubscribeToEvents();
             MapService = new MapService(mapScriptableObject);
             WaveService = new WaveService(waveScriptableObject);
             SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
             PlayerService = new PlayerService(playerScriptableObject);
-
-            PlayerService.Init(MapService, WaveService, SoundService,UIService);
+            DependencyInjection();
+         //   mapButton = new MapButton();
         }
 
+
+        private void DependencyInjection()
+        {
+
+            PlayerService.Init(MapService, SoundService, UIService);
+            MapService.Init(EventService);
+            uiService.Init(WaveService, EventService, PlayerService);
+            WaveService.Init(MapService, UIService, EventService, SoundService, WaveService, PlayerService);
+           // mapButton.Init(EventService);
+        }
         private void Update()
         {
             PlayerService.Update();
